@@ -1,0 +1,15 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int B, K;
+    cin >> B >> K;
+    
+    int angka = K-B;
+    for(int i = 31; i >= 0; i--){
+        if(angka & (1 << i)){
+            cout << (1 << i) << endl;
+        }
+    }
+    return 0;
+}
