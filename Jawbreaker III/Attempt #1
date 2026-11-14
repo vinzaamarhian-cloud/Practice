@@ -1,0 +1,91 @@
+/*
+1. Cari terbesar
+2. Tandai i dan j yang terbesar
+3. runtuhkan
+*/
+#include <bits/stdc++.h>
+using namespace std;
+
+string A[25][25];
+string hasil[25][25];
+int M, N;
+bool visited[25][25];
+bool visited2[25][25];
+
+void cek_terbesar(int x, int y, string warna, int& count){
+    if(x  >= M || x < 0 || y >= N || y < 0) return;
+    if(visited[x][y] || A[x][y] != warna) return;
+
+    count++;
+    visited[x][y] = true;
+    cek_terbesar(x-1, y, warna, count);
+    cek_terbesar(x+1, y, warna, count);
+    cek_terbesar(x, y-1, warna, count);
+    cek_terbesar(x, y+1, warna, count);
+}
+
+void runtuh(int x, int y, string warna, int count){
+    if(x  >= M || x < 0 || y >= N || y < 0) return;
+    if(visited2[x][y] || A[x][y] != warna) return;
+    visited2[x][y] = true;
+    int batas_bawah = x;
+
+    //cek batas bawah
+    while(batas_bawah < M-1 && A[batas_bawah+1][y] == warna){
+        batas_bawah++;
+    }
+    count = batas_bawah - x + 1;
+    if(x != 0 && hasil[x-1][y] != "."){
+        for(int i = x-1; i >= 0; i--){
+            hasil[i+count][y] = hasil[i][y];
+        }
+    }
+    for(int i = 0; i < count; i++){
+        hasil[i][y] = ".";
+    }
+    
+    runtuh(x-1, y, warna, count);
+    runtuh(x+1, y, warna, count);
+    runtuh(x, y-1, warna, count);
+    runtuh(x, y+1, warna, count);
+}
+
+int main() {
+    cin >> M >> N;
+
+    for(int i = 0; i < M; i++){
+        for(int j = 0; j < N; j++){
+            cin >> A[i][j];
+            hasil[i][j] = A[i][j];
+        }
+    }
+
+    int count;
+    int terbesar = 0;
+    int x, y;
+    for(int i = 0; i < M; i++){
+        for(int j = 0; j < N; j++){
+            if(!visited[i][j]){
+                count = 0;
+                cek_terbesar(i, j, A[i][j], count);
+                if(count > terbesar){
+                    x = i;
+                    y = j;
+                terbesar = max(terbesar, count);
+                }
+            }
+        }
+    }
+
+    count = 0;
+    runtuh(x, y, A[x][y], count);
+    
+    for(int i = 0; i < M; i++){
+        for(int j = 0; j < N; j++){
+            cout << hasil[i][j] << " ";
+        }
+        cout << endl;
+    }
+    
+    return 0;
+}
