@@ -1,0 +1,94 @@
+/*
+1. Cari terbesar
+2. Tandai i dan j yang terbesar
+3. Hilangkan
+4. Runtuhkan
+*/
+#include <bits/stdc++.h>
+using namespace std;
+
+string A[25][25];
+int M, N;
+bool visited[25][25];
+
+void cek_terbesar(int x, int y, string warna, int& count){
+    if(x  >= M || x < 0 || y >= N || y < 0) return;
+    if(visited[x][y] || A[x][y] != warna) return;
+
+    count++;
+    visited[x][y] = true;
+    cek_terbesar(x-1, y, warna, count);
+    cek_terbesar(x+1, y, warna, count);
+    cek_terbesar(x, y-1, warna, count);
+    cek_terbesar(x, y+1, warna, count);
+}
+
+void hilang(int x, int y, string warna){
+    if(x  >= M || x < 0 || y >= N || y < 0) return;
+    if(A[x][y] != warna) return;
+
+    A[x][y] = ".";
+    
+    hilang(x-1, y, warna);
+    hilang(x+1, y, warna);
+    hilang(x, y-1, warna);
+    hilang(x, y+1, warna);
+}
+
+void runtuh(int y){
+    vector<string> B;
+    
+    for(int i = M-1; i >= 0; i--){
+        if(A[i][y] != "."){
+            B.push_back(A[i][y]);
+        }
+    }
+
+    for(int i = 0; i < B.size(); i++){
+        A[M-i-1][y] = B[i];
+    }
+
+    for(int i = 0; i < M-B.size(); i++){
+        A[i][y] = ".";
+    }
+}
+
+int main() {
+    cin >> M >> N;
+
+    for(int i = 0; i < M; i++){
+        for(int j = 0; j < N; j++){
+            cin >> A[i][j];
+        }
+    }
+
+    int count;
+    int terbesar = 0;
+    int x, y;
+    for(int i = 0; i < M; i++){
+        for(int j = 0; j < N; j++){
+            if(!visited[i][j]){
+                count = 0;
+                cek_terbesar(i, j, A[i][j], count);
+                if(count > terbesar){
+                    x = i;
+                    y = j;
+                terbesar = max(terbesar, count);
+                }
+            }
+        }
+    }
+
+    hilang(x, y, A[x][y]);
+    for(int i = 0; i < N; i++){
+        runtuh(i);
+    }
+    for(int i = 0; i < M; i++){
+        for(int j = 0; j < N; j++){
+            cout << A[i][j] << " ";
+        }
+        cout << endl;
+    }
+    
+    return 0;
+}
