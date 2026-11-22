@@ -1,6 +1,4 @@
 """_, merefleksikan matriks berdasarkan garis horizontal
-
-A[i][j] = A[i][j]
 |, merefleksikan matriks berdasarkan garis vertikal
 90, merotasikan matriks 90 derajat searah jarum jam
 180, merotasikan matriks 180 derajat searah jarum jam
