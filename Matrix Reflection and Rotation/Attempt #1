@@ -1,0 +1,75 @@
+"""_, merefleksikan matriks berdasarkan garis horizontal
+
+A[i][j] = A[i][j]
+|, merefleksikan matriks berdasarkan garis vertikal
+90, merotasikan matriks 90 derajat searah jarum jam
+180, merotasikan matriks 180 derajat searah jarum jam
+270, merotasikan matriks 270 derajat searah jarum jam
+"""
+
+def refleksi_horizontal(A, M, N):
+  for i in range(M):
+    for j in range(N-1, int(N/2), -1):
+      A[j][i], A[N-j-1][i] = A[N-j-1][i], A[j][i]
+
+def refleksi_vertikal(A, M, N):
+  for i in range(N):
+    for j in range(M-1, int(M/2), -1):
+      A[i][j], A[i][M-j-1] = A[i][M-j-1], A[i][j]
+
+def rotasi_90(A, M, N):
+  matriks_hasil = []
+  for j in range(M):
+    temp = []
+    for i in range(N-1, -1, -1):
+      temp.append(A[i][j])
+    matriks_hasil.append(temp)
+  return matriks_hasil
+
+def rotasi_180(A, M, N):
+  matriks_hasil = []
+  for i in range(N-1, -1, -1):
+    temp = []
+    for j in range(M-1, -1, -1):
+      temp.append(A[i][j])
+    matriks_hasil.append(temp)
+  return matriks_hasil
+
+def rotasi_270(A, M, N):
+  matriks_hasil = []
+  for j in range(M-1, -1, -1):
+    temp = []
+    for i in range(N-1, -1, -1):
+      temp.append(A[i][j])
+    matriks_hasil.append(temp)
+  return matriks_hasil
+
+N, M, X = map(int, input().split())
+
+A = []
+for i in range(N):
+  B = list(map(int, input().split()))
+  A.append(B)
+
+for i in range(X):
+  operasi = input()
+  if operasi == "_":
+    refleksi_horizontal(A, M, N)
+  elif operasi == "|":
+    refleksi_vertikal(A, M, N)
+  elif operasi == "90":
+    A = rotasi_90(A, M, N)
+    N, M = M, N
+  elif operasi == "180":
+    A = rotasi_180(A, M, N)
+    N, M = M, N
+  else:
+    A = rotasi_270(A, M, N)
+    N, M = M, N
+
+for i in range(N):
+  for j in range(M):
+    print(A[i][j], end=" ")
+  print()
+
+  
